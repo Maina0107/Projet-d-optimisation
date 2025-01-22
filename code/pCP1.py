@@ -9,7 +9,7 @@ class VersionClassique(ModelesPCentre):
     
     #____________________________________Override virtuals methods to create a p-center model
 
-    def creer_modele(self, capacite: bool = False):
+    def creer_modele(self, capacite):
 
         # Création du modèle
         model = pe.ConcreteModel(name = "pCP_1")
@@ -59,11 +59,18 @@ class VersionClassique(ModelesPCentre):
                 model.c5.add((quicksum(self.data.demandes[j] * model.y[i,j] for j in C )) <= self.data.capacites[i]*model.x[i])
 
 
-        self.modele = model           #Va permettre d'enregistrer le modèle dans la classe mère
+        self.modele = model           # Va permettre d'enregistrer le modèle dans la classe mère
 
 
 
 
+    def extraire_solution(self, capacite):
+        self.solution.val_fonction = pe.value(self.modele.obj)
+        # c'est la même chose sans et avec les capacités
+        for i in range(self.data.nb_installations):
+            self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
+            for j in range(self.data.nb_clients):
+                self.solution.affectation_client[i,j] = pe.value(self.modele.y[i,j])
 
 
 
@@ -100,35 +107,3 @@ class VersionClassique(ModelesPCentre):
             print("Solution optimale trouvée.")
         else:
             print("Le solveur n'a pas trouvé de solution optimale.")
-
-
-    def extraire_solution(self):
-
-        if self.modele is None or self.modele.obj() is None:
-            raise ValueError("Le modèle n'a pas encore été résolu ou aucune solution n'a été trouvée.")
-        
-        # Extraire les installations ouvertes
-        solution_centres = [j for j in self.modele.installations if pe.value(self.modele.y[j]) == 1]
-        
-        # Extraire les affectations des clients aux installations
-        affectations = [
-            max(
-                self.modele.installations,
-                key=lambda j: pe.value(self.modele.x[i, j])
-            )
-            for i in self.modele.clients
-        ]
-        
-        # Stocker la solution dans l'objet PCentreSolution
-        self.solution = PCentreSolution(
-            ouverture_installation=solution_centres,
-            affectation_client=affectations,
-            val_fonction=pe.value(self.modele.z)
-        )
-        
-        print("Solution extraite avec succès.")
-        print(f"Centres ouverts : {self.solution.ouverture_installation}")
-        print(f"Affectations : {self.solution.affectation_client}")
-        print(f"Valeur de la fonction objectif (distance max) : {self.solution.val_fonction}")
-
-        

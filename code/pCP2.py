@@ -10,7 +10,7 @@ class VersionRayon_1(ModelesPCentre):
 
     #____________________________________Override virtuals methods  to create a p-center model
 
-    def creer_modele(self, capacite: bool = False):
+    def creer_modele(self, capacite):
 
         # Création du modèle
         model = pe.ConcreteModel(name = "pCP_2")
@@ -78,3 +78,24 @@ class VersionRayon_1(ModelesPCentre):
 
 
         self.modele = model           #Va permettre d'enregistrer le modèle dans la classe mère
+
+
+
+
+
+    def extraire_solution(self, capacite):
+        self.solution.val_fonction = pe.value(self.modele.obj)
+        if (capacite == True):
+            for i in range(self.data.nb_installations):
+                self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
+                for j in range(self.data.nb_clients):
+                    self.solution.affectation_client[i,j] = pe.value(self.modele.y[i,j])
+        else:
+            for i in range(self.data.nb_installations):
+                self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
+            for j in range(self.data.nb_clients):
+                # on affecte le client j à la première installation dans le rayon optimal
+                i = 0
+                while (self.data.matrice_distances[i,j] > pe.value(self.modele.obj) and i <= self.data.nb_installations):
+                    i += 1
+                self.solution.affectation_client[i,j] = pe.value(self.modele.y[i,j])

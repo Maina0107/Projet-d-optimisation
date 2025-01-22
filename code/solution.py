@@ -20,15 +20,13 @@ from math import sqrt
 class PCentreSolution:
     #_______________________ Attributs _______________________
 
-    def __init__(self, ouverture_installation : List[int] = None, affectation_client : List[int] = None, val_fonction : int = 0, statut : bool = False):
+    def __init__(self, ouverture_installation : List[int] = None, affectation_client : List[int] = None, val_fonction : int = 0):
 
         self.ouverture_installation = ouverture_installation if ouverture_installation is not None else []
 
         self.affectation_client = affectation_client if affectation_client is not None else []
 
         self.val_fonction = val_fonction
-
-        self.statut = statut
 
 
     #_______________________ Méthodes _______________________
