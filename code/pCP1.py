@@ -4,20 +4,18 @@ from pyomo.core import quicksum
 
 class VersionClassique(ModelesPCentre):
 
-    #def __init__(self, data):
-    #    super().__init__(data)
+    def __init__(self, data):
+        super().__init__(data)
     
     #____________________________________Override virtuals methods to create a p-center model
 
     def creer_modele(self, capacite: bool = False):
 
-        data = self.data
-
         # Création du modèle
         model = pe.ConcreteModel(name = "pCP_1")
 
-        F = range(data.nb_installations)
-        C = range(data.nb_clients)
+        F = range(self.data.nb_installations)
+        C = range(self.data.nb_clients)
 
         # variables
         # x_i vaut 1 si l'installation i est ouverte, 0 sinon
@@ -34,7 +32,7 @@ class VersionClassique(ModelesPCentre):
         # contraintes
 
         # on ouvre au plus p installations
-        model.c1 = pe.Constraint(expr=(quicksum(model.x[i] for i in F) <= data.p))
+        model.c1 = pe.Constraint(expr=(quicksum(model.x[i] for i in F) <= self.data.p))
 
         # on doit affecter chaque client à exactement 1 installation
         model.c2 = pe.ConstraintList()
@@ -51,14 +49,14 @@ class VersionClassique(ModelesPCentre):
         model.c4 = pe.ConstraintList()
         for i in F:
             for j in C:
-                model.c4.add(model.D >= data.matrice_distances[i,j]*model.y[i,j])
+                model.c4.add(model.D >= self.data.matrice_distances[i,j]*model.y[i,j])
 
         # contraintes à rajouter si on veut prendre en compte les capacités
         if (capacite == True): 
             # contraintes de capacités
             model.c5 = pe.ConstraintList()
             for i in F:
-                model.c5.add((quicksum(data.demandes[j] * model.y[i,j] for j in C )) <= data.capacites[i]*model.x[i])
+                model.c5.add((quicksum(self.data.demandes[j] * model.y[i,j] for j in C )) <= self.data.capacites[i]*model.x[i])
 
 
         self.modele = model           #Va permettre d'enregistrer le modèle dans la classe mère

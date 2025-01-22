@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 #Nommer le fichier dans lequel est écrite la solution : 
-#n2p1i1_v1c1.sol : solution de l'intance n2p1i1 avec version 1 et avec capacité
-#n2p1i1_v2c0.sol : solution de l'intance n2p1i1 avec version 2 et sans capacité
+#n2p1i1_v1c1.sol.txt : solution de l'intance n2p1i1 avec version 1 et avec capacité
+#n2p1i1_v2c0.sol.txt : solution de l'intance n2p1i1 avec version 2 et sans capacité
 
 #Nommer fichier lp :
-#n2p1i1_v1c1.lp         #fichier pour écrire le modèle
+#n2p1i1_v1c1.lp.txt : solution de l'intance n2p1i1 avec version 1 et avec capacité
+#n2p1i1_v2c0.lp.txt : solution de l'intance n2p1i1 avec version 2 et sans capacité
 
 from numpy import ndarray
 import numpy as np
