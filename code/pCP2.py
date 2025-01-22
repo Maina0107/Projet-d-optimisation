@@ -12,12 +12,6 @@ class VersionRayon_1(ModelesPCentre):
 
         data = self.data
 
-        #A
-        #A
-        #A
-        #A
-        #A
-
         # Création du modèle
         model = pe.ConcreteModel(name = "pCP_2")
 

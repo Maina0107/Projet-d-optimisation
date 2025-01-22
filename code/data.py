@@ -86,7 +86,7 @@ class PCentreData:
 
         for i in range (self.nb_clients) : 
             for j in range (self.nb_installations) :
-                self.matrice_distances[i, j] = sqrt((self.abscisse_client[i] - self.abscisse_installation[j])**2 + (self.ordonnee_client[i] - self.ordonnee_installation[j])**2)
+                self.matrice_distances[i, j] = round(sqrt((self.abscisse_client[i] - self.abscisse_installation[j])**2 + (self.ordonnee_client[i] - self.ordonnee_installation[j])**2),2)
 
 
     def tri_distances(self):
