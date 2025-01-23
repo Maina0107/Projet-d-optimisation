@@ -6,21 +6,26 @@ from solution import PCentreSolution
 import pyomo.environ as pe
 from pyomo.core import quicksum
 
+
 def checkSolution(data: PCentreData, sol: PCentreSolution, capa: bool) -> bool:
     # le nombre d'installations ouvertes doit être inférieur ou égal à p
     if (sum(sol.ouverture_installation) > data.p):
+        print("Solution invalide : il y a plus d'installations ouvertes que la limite.")
         return False
     # chaque client doit être affecté, à une installation existante et ouverte
     for j in range(data.nb_clients):
         i = sol.affectation_client[j]     # l'installation à laquelle est affecté le client j
         # si l'installation n'existe pas
         if (i > data.nb_installations or i < 0):
+            print("Solution invalide : le client ", j, " n'est pas affecté à une installation.")
             return False
         # si l'installation n'est pas ouverte
         if (sol.ouverture_installation[i] == 0):
+            print("Solution invalide : le client ", j, " est affecté à une installation fermée.")
             return False
         # on vérifie que la distance est bien inférieure ou égale à la distance maximale trouvée
         if (data.matrice_distances[i,j] > sol.val_fonction):
+            print("Solution invalide : le client ", j, " est affecté à l'installation ", i, ", qui est à une distance supérieure à la distance maximale trouvée.")
             return False
     # si on a pris en compte les capacités
     # il faut que la somme des demandes des clients affectés à une installation soit inférieure ou égale à la capacité de celle-ci
@@ -32,6 +37,7 @@ def checkSolution(data: PCentreData, sol: PCentreSolution, capa: bool) -> bool:
                 if (sol.affectation_client[j] == i):
                     somme_demandes += data.demandes[j]
             if (somme_demandes > data.capacites[i]):
+                print("Solution invalide : la demande de l'installation ", i, " dépasse sa capacité.")
                 return False
     return True
     

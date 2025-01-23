@@ -84,30 +84,34 @@ class VersionRayon_2_1(ModelesPCentre):
 
 
     def extraire_solution(self, capacite):
-        # si une solution a été trouvée
+        # initialisation des vecteurs à -1, et de la valeur de l'objectif à -1 aussi
+        self.solution.affectation_client = [-1]*self.data.nb_clients
+        self.solution.ouverture_installation = [-1]*self.data.nb_installations
+        self.solution.val_fonction = -1
+
+        # si une solution a été trouvée, on modifie les valeurs
         if (self.statut == True):
             self.solution.val_fonction = pe.value(self.modele.obj)
             # si on a choisi de prendre en compte les capacités, la variable d'affectation existe
             if (capacite == True):
                 for i in range(self.data.nb_installations):
-                    self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
+                    if (pe.value(self.modele.x[i]) >= 0.8):
+                        self.solution.ouverture_installation[i] = 1
+                    else :
+                        self.solution.ouverture_installation[i] = 0
                     for j in range(self.data.nb_clients):
-                        self.solution.affectation_client[i,j] = pe.value(self.modele.y[i,j])
-            # sinon, la variable n'existe pas et il faut choisir une installation à une distance inférieure au rayon optimal trouvé
+                        if (pe.value(self.modele.y[i,j]) >= 0.8):
+                            self.solution.affectation_client[i,j] = i
+            # sinon, la variable n'existe pas et il faut choisir une installation ouverte à une distance inférieure ou égale au rayon optimal trouvé
             else:
                 for i in range(self.data.nb_installations):
-                    self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
+                    if (pe.value(self.modele.x[i]) >= 0.8):
+                        self.solution.ouverture_installation[i] = 1
+                    else :
+                        self.solution.ouverture_installation[i] = 0
                 for j in range(self.data.nb_clients):
-                    # on affecte le client j à la première installation dans le rayon optimal
-                    i = 0
-                    while (self.data.matrice_distances[i,j] > pe.value(self.modele.obj) and i <= self.data.nb_installations):
-                        i += 1
-                    self.solution.affectation_client[i,j] = pe.value(self.modele.y[i,j])
-        # si aucune solution n'a été trouvée, on met tout à -1
-        else :
-            self.solution.val_fonction = -1
-            for i in range(self.data.nb_installations):
-                self.solution.ouverture_installation[i] = -1
-                for j in range(self.data.nb_clients):
-                    self.solution.affectation_client[i,j] = -1
-
+                    # on affecte le client j à la première installation ouverte dans le rayon optimal
+                    for i in range (self.data.nb_installations):
+                        if (self.data.matrice_distances[i,j] <= pe.value(self.modele.obj) and pe.value(self.modele.x[i]) >= 0.8):
+                            self.solution.affectation_client[i,j] = i
+                            break

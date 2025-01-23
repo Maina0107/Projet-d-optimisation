@@ -65,19 +65,20 @@ class VersionClassique(ModelesPCentre):
 
 
     def extraire_solution(self, capacite):
-        # si une solution a été trouvée
+        # initialisation des vecteurs à -1, et de la valeur de l'objectif à -1 aussi
+        self.solution.affectation_client = [-1]*self.data.nb_clients
+        self.solution.ouverture_installation = [-1]*self.data.nb_installations
+        self.solution.val_fonction = -1
+
+        # si une solution a été trouvée, on modifie les valeurs
         if (self.statut == True):
             self.solution.val_fonction = pe.value(self.modele.obj)
             # c'est la même chose sans et avec les capacités
             for i in range(self.data.nb_installations):
-                self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
+                if (pe.value(self.modele.x[i]) >= 0.8):
+                    self.solution.ouverture_installation[i] = 1
+                else :
+                    self.solution.ouverture_installation[i] = 0
                 for j in range(self.data.nb_clients):
-                    self.solution.affectation_client[i,j] = pe.value(self.modele.y[i,j])
-        # si aucune solution n'a été trouvée, on met tout à -1
-        else :
-            self.solution.val_fonction = -1
-            for i in range(self.data.nb_installations):
-                self.solution.ouverture_installation[i] = -1
-                for j in range(self.data.nb_clients):
-                    self.solution.affectation_client[i,j] = -1
-
+                    if (pe.value(self.modele.y[i,j]) >= 0.8):
+                        self.solution.affectation_client[i,j] = i
