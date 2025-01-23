@@ -39,6 +39,7 @@ def checkSolution(data: PCentreData, sol: PCentreSolution, capa: bool) -> bool:
             if (somme_demandes > data.capacites[i]):
                 print("Solution invalide : la demande de l'installation ", i, " dépasse sa capacité.")
                 return False
+    print("La solution est valide.")
     return True
     
 
@@ -68,16 +69,16 @@ def main():
 
      #___________________________Activation of the capacity constraint
     capacity = False
-    if args.withCapacity == 1:
+    if args.avecCapacite >= 1:
         capacity = True
 
     #__________________________ Load the data
     data = PCentreData()
-    data.lireData(f'{args.cheminVersInstance}/n{args.nbNodes}p{args.nbToOpen}i{args.indexOfInstance}')
+    data.lecture(f'{args.cheminVersInstance}/n{args.nbPoint}p{args.nbAouvrir}i{args.indiceInstance}')
     
     #__________________________ Load the solution
     sol = PCentreSolution()
-    sol.lireSolution(f'{args.dossierSolution}/n{args.nbNodes}p{args.nbToOpen}i{args.indexOfInstance}_v{args.version}.sol')
+    sol.lecture_sol(f'{args.dossierSolution}/n{args.nbPoint}p{args.nbAouvrir}i{args.indiceInstance}_v{args.version}c{args.avecCapacite}.sol')
     
 
     #___________________________ Check the solution

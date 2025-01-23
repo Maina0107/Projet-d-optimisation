@@ -13,11 +13,18 @@ import time
 
 class ModelesPCentre:
     #_______________________ Attributs _______________________
-    def __init__(self, mydata: PCentreData):
+    def __init__(self, mydata: PCentreData, gap: float = 0, temps: float = 0, obj: float = 0, obj_upper: float = 0, obj_lower: float = 0, etat: bool = False):
         self.data = mydata
         self.solution = PCentreSolution()
         self.modele = None                  # destiné à contenir le modèle d'optimisation.
         self.statut = False
+        self.gap = gap
+        self.temps = temps
+        self.obj = obj
+        self.obj_upper = obj_upper
+        self.obj_lower = obj_lower
+        self.etat = etat 
+
 
     #_______________________ Méthodes Création _______________________
     def creer_modele(self, capacite: bool):                                            #bool capacité : oui ou non on utilise les capacités
@@ -52,10 +59,13 @@ class ModelesPCentre:
         # Quel est le type de la solution retournée 
         if(results.solver.termination_condition == po.TerminationCondition.optimal):   # Solution optmiale trouvée
             self.statut = True
+            self.etat = True
         elif(results.solver.termination_condition == po.TerminationCondition.maxTimeLimit):  # Solution trouvée mais temps limite atteint 
             self.statut = True
+            self.etat = False
         else:
             self.statut = False 
+            self.etat = False
             print("Pas de solution calculée dans le temps limite (ou problème non borné)")
 
         # Affichage du résultat
@@ -68,6 +78,19 @@ class ModelesPCentre:
         print(f'Meilleure borne supérieure sur la valeur de la fonction objectif: { results.problem.upper_bound}')
         print("----------------------------------")
        
+        #self.gap = results.solver.relative_gap ########## ON N'A PAS LE GAAAAAAAAAAAP
+        self.temps = end_time - start_time
+        self.obj = pe.value(self.modele.obj)
+        self.obj_upper = results.problem.upper_bound
+        self.obj_lower = results.problem.lower_bound
+
+        self.gap = round((abs(self.obj_upper-self.obj_lower)/max(0.001 , self.obj_upper)) * 100,2)
+
+        print(f'Gap = {self.gap}')
+        print(f'Temps = {self.temps}')
+        print("----------------------------------")
+
+
 
     #_______________________ Méthode Extraction de la Solution _______________________
     def extraire_solution(self, capacite: bool):

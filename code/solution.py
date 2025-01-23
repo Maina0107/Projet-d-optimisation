@@ -44,10 +44,9 @@ class PCentreSolution:
         else:
             capacity_flag = "c0" 
 
-        filename = f"{instance_name}_v{version}{capacity_flag}.sol.txt"
+        filename = f"{instance_name}_v{version}{capacity_flag}.sol"
         
-        ################ solutionfilePath = f"Solution/{filename}"
-        solutionfilePath = filename
+        solutionfilePath = f"Solutions/{filename}"
 
         nb_noeuds = len(self.ouverture_installation)
 
@@ -68,3 +67,22 @@ class PCentreSolution:
 
             file.write(str(self.val_fonction))
             
+
+
+    def lecture_sol(self, sol_name: str):
+        numero_ligne = 1
+        with open(sol_name, "r") as fichier:
+            for ligne in fichier:
+                match numero_ligne:
+                    # la première ligne est celle des ouvertures des installations
+                    case 1:
+                        self.ouverture_installation = list(map(int,ligne.split(" ")))
+                    # la deuxième ligne est celle des affectations
+                    case 2:
+                        self.affectation_client = list(map(int,ligne.split(" ")))
+                    # la troisième ligne est la valeur de l'objectif
+                    case 3:
+                        self.val_fonction = float(ligne)
+                    case _:
+                        raise ValueError("Le fichier solution n'a pas le bon nombre de lignes.")
+                numero_ligne += 1
