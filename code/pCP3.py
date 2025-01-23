@@ -95,7 +95,7 @@ class VersionRayon_2(ModelesPCentre):
                         self.solution.ouverture_installation[i] = 0
                     for j in range(self.data.nb_clients):
                         if (pe.value(self.modele.y[i,j]) >= 0.8):
-                            self.solution.affectation_client[i,j] = i
+                            self.solution.affectation_client[j] = i
             # sinon, la variable n'existe pas et il faut choisir une installation ouverte à une distance inférieure ou égale au rayon optimal trouvé
             else:
                 for i in range(self.data.nb_installations):
@@ -107,5 +107,5 @@ class VersionRayon_2(ModelesPCentre):
                     # on affecte le client j à la première installation ouverte dans le rayon optimal
                     for i in range (self.data.nb_installations):
                         if (self.data.matrice_distances[i,j] <= pe.value(self.modele.obj) and pe.value(self.modele.x[i]) >= 0.8):
-                            self.solution.affectation_client[i,j] = i
+                            self.solution.affectation_client[j] = i
                             break

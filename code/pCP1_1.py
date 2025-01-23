@@ -84,5 +84,5 @@ class VersionClassique_1(ModelesPCentre):
                     self.solution.ouverture_installation[i] = 0
                 for j in range(self.data.nb_clients):
                     if (pe.value(self.modele.y[i,j]) >= 0.8):
-                        self.solution.affectation_client[i,j] = i
+                        self.solution.affectation_client[j] = i
 

@@ -36,12 +36,17 @@ class PCentreSolution:
     def ecriture_sol(self, instance_name: str, version: int, capacite: bool, versioncapa: int):
 
         # Construire le nom du fichier en fonction des paramètres
-        capacity_flag = "c1" if capacite else "c0"
-        if(capacite): 
-            filename = f"{instance_name}_v{version}{capacity_flag}_{versioncapa}.sol.txt"
+        if(capacite):
+            if(versioncapa == 1):
+                capacity_flag = "c1"
+            else:
+                capacity_flag = "c2"
         else:
-            filename = f"{instance_name}_v{version}{capacity_flag}.sol.txt"
+            capacity_flag = "c0" 
+
+        filename = f"{instance_name}_v{version}{capacity_flag}.sol.txt"
         
+        ################ solutionfilePath = f"Solution/{filename}"
         solutionfilePath = filename
 
         nb_noeuds = len(self.ouverture_installation)
