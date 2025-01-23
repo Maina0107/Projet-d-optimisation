@@ -4,7 +4,12 @@ import data as dt
 from pCP1 import VersionClassique
 from solution import PCentreSolution
 
-file = "/net/cremi/mboivent/Bureau/espaces/travail/S8/Projet d'optimisation/Instances/n3p1i1"
+import pyomo.environ as pe
+import pyomo.opt as po
+from pyomo.core import quicksum
+
+
+file = "/net/cremi/mboivent/Bureau/espaces/travail/S8/Projet_optimisation/Instances/n3p1i1"
 
 myData = dt.PCentreData() 
 myData.lecture(file)
@@ -14,10 +19,12 @@ myData.tri_distances()
 
 modV1 = VersionClassique(myData)
 modV1.creer_modele(False)
-modV1.lancer(temps limite)
+modV1.lancer(60)
 # on doit modifier le statut dans lancer, si on a trouvé une sol ou pas
 modV1.extraire_solution(False)
-modV1.solution.ecriture_sol(pipi caca)
+
+# Nom de l'instance  ,  version utilisée (1, 2 ou 3)  , capacité oui ou non  , si pas de capacité 0 sinon 1 ou 2
+modV1.solution.ecriture_sol("n3p1i1", 1, False, 0)
 
 
 

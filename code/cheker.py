@@ -3,6 +3,8 @@
 import argparse
 from data import PCentreData
 from solution import PCentreSolution
+import pyomo.environ as pe
+from pyomo.core import quicksum
 
 def checkSolution(data: PCentreData, sol: PCentreSolution, capa: bool) -> bool:
     # le nombre d'installations ouvertes doit être inférieur ou égal à p

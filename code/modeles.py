@@ -2,7 +2,8 @@
 from data import PCentreData
 from solution import PCentreSolution
 
-import pyomo.environ as po
+import pyomo.environ as pe
+import pyomo.opt as po
 from pyomo.core import quicksum
 import time 
 
@@ -62,7 +63,7 @@ class ModelesPCentre:
         print(f'Temps de résolution (s) : {end_time - start_time:.4f} seconds')
         print(f'Status du solveur = {results.solver.status}')
         print(f'Status de la résolution = {results.solver.termination_condition}')
-        print(f'Valeur de la fonction objectif = {po.value(self.modele.obj)}')
+        print(f'Valeur de la fonction objectif = {pe.value(self.modele.obj)}')
         print(f'Meilleure borne inférieure sur la valeur de la fonction objectif: { results.problem.lower_bound}')
         print(f'Meilleure borne supérieure sur la valeur de la fonction objectif: { results.problem.upper_bound}')
         print("----------------------------------")

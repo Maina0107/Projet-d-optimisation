@@ -13,7 +13,7 @@ from numpy import ndarray
 import numpy as np
 from typing import List, Tuple
 from math import sqrt
-import pyomo.environ as po
+
 
 # ----------------------------------------------------------------------------
 #  Class solution
