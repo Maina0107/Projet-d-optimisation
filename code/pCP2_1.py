@@ -3,7 +3,14 @@ import pyomo.environ as pe
 from pyomo.core import quicksum
 
 
-class VersionRayon_1(ModelesPCentre):
+#####
+# on modifie la contrainte pour ne pas affecter un client à une installation en dehors du rayon optimal dans le cas avec capacité
+# pour comparer les deux formulations
+# ATTENTION, n'est utile que si on prend en compte les capacités
+#####
+
+
+class VersionRayon_1_1(ModelesPCentre):
 
     def __init__(self, data):
         super().__init__(data)
@@ -65,8 +72,8 @@ class VersionRayon_1(ModelesPCentre):
             model.c6 = pe.ConstraintList()
             for i in F:
                 for j in C:
-                    model.c6.add( quicksum(model.z[k] for k in K if self.data.matrice_distances[i,j] <= self.data.distances_triees[k]) >= model.y[i,j])
-
+                    model.c6.add( (self.data.distances_triees[0] + quicksum((self.data.distances_triees[k] - self.data.distances_triees[k-1])*model.z[k]  for k in K) ) 
+                                 >= self.data.matrice_distances[i,j]*model.y[i,j] )
 
         self.modele = model           #Va permettre d'enregistrer le modèle dans la classe mère
 

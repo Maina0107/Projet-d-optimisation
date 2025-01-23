@@ -8,7 +8,7 @@ class VersionRayon_2(ModelesPCentre):
     def __init__(self, data):
         super().__init__(data)
 
-   #____________________________________Override virtuals methods  to create a p-center model
+    #____________________________________Override virtuals methods  to create a p-center model
 
     def creer_modele(self, capacite):
 
@@ -64,14 +64,6 @@ class VersionRayon_2(ModelesPCentre):
             for i in F:
                 model.c6.add((quicksum(self.data.demandes[j] * model.y[i,j] for j in C )) <= self.data.capacites[i]*model.x[i])
 
-            # ATTENTION Contrainte pour la première formulation
-            # pour ne pas affecter un client à une installation en dehors du rayon optimal
-            model.c7 = pe.ConstraintList()
-            for i in F:
-                for j in C:
-                    model.c7.add( quicksum( self.data.distances_triees[k]*model.u[k] for k in K ) >= model.y[i,j]*self.data.matrice_distances[i,j])
-
-            # ATTENTION Contrainte pour la deuxième formulation
             # pour ne pas affecter un client à une installation en dehors du rayon optimal
             model.c7 = pe.ConstraintList()
             for i in F:
@@ -86,19 +78,30 @@ class VersionRayon_2(ModelesPCentre):
 
 
     def extraire_solution(self, capacite):
-        self.solution.val_fonction = pe.value(self.modele.obj)
-        if (capacite == True):
-            for i in range(self.data.nb_installations):
-                self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
+        # si une solution a été trouvée
+        if (self.statut == True):
+            self.solution.val_fonction = pe.value(self.modele.obj)
+            # si on a choisi de prendre en compte les capacités, la variable d'affectation existe
+            if (capacite == True):
+                for i in range(self.data.nb_installations):
+                    self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
+                    for j in range(self.data.nb_clients):
+                        self.solution.affectation_client[i,j] = pe.value(self.modele.y[i,j])
+            # sinon, la variable n'existe pas et il faut choisir une installation à une distance inférieure au rayon optimal trouvé
+            else:
+                for i in range(self.data.nb_installations):
+                    self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
                 for j in range(self.data.nb_clients):
+                    # on affecte le client j à la première installation dans le rayon optimal
+                    i = 0
+                    while (self.data.matrice_distances[i,j] > pe.value(self.modele.obj) and i <= self.data.nb_installations):
+                        i += 1
                     self.solution.affectation_client[i,j] = pe.value(self.modele.y[i,j])
-        else:
+        # si aucune solution n'a été trouvée, on met tout à -1
+        else :
+            self.solution.val_fonction = -1
             for i in range(self.data.nb_installations):
-                self.solution.ouverture_installation[i] = pe.value(self.modele.x[i])
-            for j in range(self.data.nb_clients):
-                # on affecte le client j à la première installation dans le rayon optimal
-                i = 0
-                while (self.data.matrice_distances[i,j] > pe.value(self.modele.obj) and i <= self.data.nb_installations):
-                    i += 1
-                self.solution.affectation_client[i,j] = pe.value(self.modele.y[i,j])
+                self.solution.ouverture_installation[i] = -1
+                for j in range(self.data.nb_clients):
+                    self.solution.affectation_client[i,j] = -1
 

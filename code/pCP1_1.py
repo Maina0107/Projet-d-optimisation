@@ -2,7 +2,14 @@ from modeles import ModelesPCentre
 import pyomo.environ as pe
 from pyomo.core import quicksum
 
-class VersionClassique(ModelesPCentre):
+
+#####
+# on a retiré la contrainte (4) du modèle dans le rapport, pour comparer l'efficacité des deux formulations
+# ATTENTION, n'est valide que si on prend en compte les capacités
+#####
+
+
+class VersionClassique_1(ModelesPCentre):
 
     def __init__(self, data):
         super().__init__(data)
@@ -39,11 +46,6 @@ class VersionClassique(ModelesPCentre):
         for j in C:
             model.c2.add(quicksum(model.y[i,j] for i in F) == 1)
 
-        # on ne peut pas affecter un client à une installation si elle n'est pas ouverte
-        model.c3 = pe.ConstraintList()
-        for i in F:
-            for j in C:
-                model.c3.add(model.y[i,j] <= model.x[i])
 
         # D est plus grand que chaque distance
         model.c4 = pe.ConstraintList()

@@ -5,11 +5,32 @@ from data import PCentreData
 from solution import PCentreSolution
 
 def checkSolution(data: PCentreData, sol: PCentreSolution, capa: bool) -> bool:
-    #_______________ Implémenter le checker
-    #
-    #
-    #
-    #
+    # le nombre d'installations ouvertes doit être inférieur ou égal à p
+    if (sum(sol.ouverture_installation) > data.p):
+        return False
+    # chaque client doit être affecté, à une installation existante et ouverte
+    for j in range(data.nb_clients):
+        i = sol.affectation_client[j]     # l'installation à laquelle est affecté le client j
+        # si l'installation n'existe pas
+        if (i > data.nb_installations or i < 0):
+            return False
+        # si l'installation n'est pas ouverte
+        if (sol.ouverture_installation[i] == 0):
+            return False
+        # on vérifie que la distance est bien inférieure ou égale à la distance maximale trouvée
+        if (data.matrice_distances[i,j] > sol.val_fonction):
+            return False
+    # si on a pris en compte les capacités
+    # il faut que la somme des demandes des clients affectés à une installation soit inférieure ou égale à la capacité de celle-ci
+    if (capa == True):
+        for i in range(data.nb_installations):
+            # la somme des demandes des clients affectés à l'installation i
+            somme_demandes = 0
+            for j in range(data.nb_clients):
+                if (sol.affectation_client[j] == i):
+                    somme_demandes += data.demandes[j]
+            if (somme_demandes > data.capacites[i]):
+                return False
     return True
     
 
