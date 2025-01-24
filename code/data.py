@@ -18,15 +18,15 @@ class PCentreData:
                  distances_triees : List[float] = None, matrice_distances : ndarray = None):
         
         # Initialisation des attributs
-        self.p = p 
-        self.nb_installations = nb_installations       
-        self.nb_clients = nb_clients             
+        self.p = p
+        self.nb_installations = nb_installations
+        self.nb_clients = nb_clients
         self.abscisse_client = abscisse_client if abscisse_client is not None else []
         self.ordonnee_client = ordonnee_client if ordonnee_client is not None else []
         self.abscisse_installation = abscisse_installation if abscisse_installation is not None else []
         self.ordonnee_installation = ordonnee_installation if ordonnee_installation is not None else []
-        self.capacites = capacites          
-        self.demandes = demandes              
+        self.capacites = capacites
+        self.demandes = demandes
         self.matrice_distances = matrice_distances
         self.distances_triees = distances_triees
 
@@ -83,8 +83,7 @@ class PCentreData:
     def distances(self):
 
         self.matrice_distances = np.zeros((self.nb_clients, self.nb_installations))
-
-        for i in range (self.nb_clients) : 
+        for i in range (self.nb_clients) :
             for j in range (self.nb_installations) :
                 self.matrice_distances[i, j] = round(sqrt((self.abscisse_client[i] - self.abscisse_installation[j])**2 + (self.ordonnee_client[i] - self.ordonnee_installation[j])**2),2)
 
