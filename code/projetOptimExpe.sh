@@ -6,7 +6,7 @@ dossier_Experimentation="Experimentations"
 
 ###### ATTENTIOOOOOOON CREER LES DOSSIERS DANS Code !!!!!!!!!!!!!!!!!!!!!!!!!
 
-Noeuds=(5 10 20 30 50) # Ensemble des valeur possible de n
+Noeuds=(30) # Ensemble des valeur possible de n
 # Les valeurs de p pour chaque n
 P_5=(1 2 3) 
 P_10=(1 2 3)
@@ -17,7 +17,7 @@ P_50=(5 12 16)
 index=(1 2 3 4 5) # Ensemble des valeurs possibles de i
 version=(1 2 3) # Les versions du problème
 capacite=(0 1 2) # Les valeurs d'activation de la contrainte de capacité
-TL=60  # Temps limite de résolution
+TL=300  # Temps limite de résolution
 
 for n in "${Noeuds[@]}"; do
     results_file="${dossier_Experimentation}/results_n${n}.txt"

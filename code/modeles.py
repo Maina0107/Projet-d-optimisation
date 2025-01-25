@@ -85,7 +85,7 @@ class ModelesPCentre:
             self.erreur = ve
         except RuntimeError as re:
             print("RuntimeError capturé :", re)
-            self.erreur = re
+            self.erreur = "irréalisable"
         except PyomoException as ae:
             print("Erreur liée à l'exécution de Highs :", ae)
             self.erreur = ae
@@ -97,18 +97,18 @@ class ModelesPCentre:
             self.erreur = e
 
         # Save the results
-        if self.status:
+        if self.statut:
             self.temps = round(end_time - start_time, 3)
             self.obj = round(pe.value(self.modele.obj), 3)
             self.obj_upper = round(results.problem.upper_bound, 3)
             self.obj_lower = round(results.problem.lower_bound, 3)
-            self.gap = 100 * abs(self.obj_upper - self.obj_lower)
-            if self.obj_upper == 0:
-                self.gap = self.gap / abs(self.obj_upper)
+            self.gap = abs(self.obj_upper - self.obj_lower)
+            if abs(self.obj_upper) >= 0.0001:
+                self.gap = 100 * self.gap / abs(self.obj_upper)
             self.gap = round(self.gap, 2)
 
         # Affichage du résultat
-        print("\n----------------------------------")
+        """print("\n----------------------------------")
         print(f'Temps de résolution (s) : {end_time - start_time:.4f} seconds')
         print(f'Status du solveur = {results.solver.status}')
         print(f'Status de la résolution = {results.solver.termination_condition}')
@@ -118,7 +118,7 @@ class ModelesPCentre:
         print("----------------------------------")
         print(f'Gap = {self.gap}')
         print(f'Temps = {self.temps}')
-        print("----------------------------------")
+        print("----------------------------------")"""
 
     #_______________________ Méthode Extraction de la Solution _______________________
     def extraire_solution(self, capacite: bool):

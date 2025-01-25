@@ -72,7 +72,7 @@ class VersionClassique(ModelesPCentre):
 
         # si une solution a été trouvée, on modifie les valeurs
         if (self.statut == True):
-            self.solution.val_fonction = pe.value(self.modele.obj)
+            self.solution.val_fonction = round(pe.value(self.modele.obj),2)
             # c'est la même chose sans et avec les capacités
             for i in range(self.data.nb_installations):
                 if (pe.value(self.modele.x[i]) >= 0.8):

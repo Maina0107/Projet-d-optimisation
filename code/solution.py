@@ -45,26 +45,24 @@ class PCentreSolution:
             capacity_flag = "c0" 
 
         filename = f"{instance_name}_v{version}{capacity_flag}.sol"
-        
-        solutionfilePath = f"Solutions/{filename}"
+        solutionfilePath = filename
 
         nb_noeuds = len(self.ouverture_installation)
 
         with open(solutionfilePath, 'w') as file:
-
+            # les ouvertures
             for i in range(nb_noeuds) :
                 file.write(str(self.ouverture_installation[i]))
-                file.write(" ")
-            
-            file.write("\n") #Je passe à la ligne suivante
-
+                if (i < nb_noeuds-1):   # pour ne pas avoir d'espace à la fin de la ligne
+                    file.write(" ")
+            file.write("\n") # ligne suivante
+            # les affectations
             for j in range(nb_noeuds):
-                    
                 file.write(str(self.affectation_client[j]))
-                file.write(" ")
-
-            file.write("\n") #Je passe à la ligne suivante
-
+                if (j < nb_noeuds-1):   # pour ne pas avoir d'espace à la fin de la ligne
+                    file.write(" ")
+            file.write("\n") # ligne suivante
+            # la valeur de l'objectif
             file.write(str(self.val_fonction))
             
 

@@ -46,7 +46,9 @@ def main():
 
     #__________________________ Load the data
     data = PCentreData()
-    data.lireData(f'{args.cheminVersInstance}/n{args.nbPoints}p{args.nbAouvrir}i{args.indiceInstance}')
+    data.lecture(f'{args.cheminVersInstance}/n{args.nbPoints}p{args.nbAouvrir}i{args.indiceInstance}')
+    data.distances()
+    data.tri_distances()
     
     #__________________________ Create the model
     if args.version == 1 and args.avecCapacite <= 1:
@@ -72,12 +74,12 @@ def main():
     model.lancer(args.tempsLimte)
 
     #__________________________ Save the solution
-    model.extraire_solution()
-    model.solution.ecrireSolution(f'{args.dossierSolution}/n{args.nbPoints}p{args.nbAouvrir}i{args.indiceInstance}_v{args.version}c{args.avecCapacite}.sol')
+    model.extraire_solution(capacity)
+    model.solution.ecriture_sol(f'{args.dossierSolution}/n{args.nbPoints}p{args.nbAouvrir}i{args.indiceInstance}_v{args.version}c{args.avecCapacite}.sol', args.version, capacity, args.avecCapacite)
 
     #__________________________ write results in dataBase file
     with open(args.fichierResultat, 'a') as f:
-        f.write(f'{args.nbPoints} {args.nbAouvrir} {args.indiceInstance} {args.version} {args.avecCapacite} {model.erreur} {model.status} {model.etat} {model.temps_creation} {model.temps} {model.gap} {model.obj} {model.obj_upper} {model.obj_lower}\n')
+        f.write(f'{args.nbPoints} {args.nbAouvrir} {args.indiceInstance} {args.version} {args.avecCapacite} {model.erreur} {model.statut} {model.etat} {model.temps_creation} {model.temps} {model.gap} {model.obj} {model.obj_upper} {model.obj_lower}\n')
 
 if __name__ == "__main__":
     main()

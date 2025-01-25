@@ -76,6 +76,7 @@ def main():
     data = PCentreData()
     data.lecture(f'{args.cheminVersInstance}/n{args.nbPoint}p{args.nbAouvrir}i{args.indiceInstance}')
     data.distances()
+    data.tri_distances()
     
     #__________________________ Load the solution
     sol = PCentreSolution()
