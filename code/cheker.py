@@ -47,7 +47,7 @@ def main():
     parser = argparse.ArgumentParser(description='Checker for PCentre solution.')
    
     parser.add_argument('-v', '--version', required=True, type=int, choices=[1, 2, 3], help='Version of the problem')
-    parser.add_argument('-c', '--avecCapacite', required=True, type=int, choices=[0, 1], help='Capacity constraint')
+    parser.add_argument('-c', '--avecCapacite', required=True, type=int, choices=[0, 1, 2], help='Capacity constraint')
     parser.add_argument('-d', '--cheminVersInstance', required=True, help='Path to the instance')
     parser.add_argument('-n', '--nbPoint', required=True, type=int, help='Number of nodes')
     parser.add_argument('-p', '--nbAouvrir', required=True, type=int, help='Number of facility to open')

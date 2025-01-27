@@ -16,7 +16,6 @@ def main():
     parser = argparse.ArgumentParser(description='Solver script')
     parser.add_argument('-v', '--version', required=True, type=int, choices=[1, 2, 3], help='Version of the solver')
     parser.add_argument('-c', '--avecCapacite', required=True, type=int, choices=[0, 1, 2], help='Capacity constraint')
-    #parser.add_argument('-vc', '--versionCapacite', required=True, type=int, choices=[0, 1, 2], help='Version capacity constraint')
     parser.add_argument('-d', '--cheminVersInstance', required=True, help='Path to the instance')
     parser.add_argument('-t', '--tempsLimte', required=True, help='Limit time of the solver')
     parser.add_argument('-n', '--nbPoints', required=True, type=int, help='Number of nodes')
@@ -75,11 +74,12 @@ def main():
 
     #__________________________ Save the solution
     model.extraire_solution(capacity)
-    model.solution.ecriture_sol(f'{args.dossierSolution}/n{args.nbPoints}p{args.nbAouvrir}i{args.indiceInstance}_v{args.version}c{args.avecCapacite}.sol', args.version, capacity, args.avecCapacite)
+    model.solution.ecriture_sol(f'{args.dossierSolution}/n{args.nbPoints}p{args.nbAouvrir}i{args.indiceInstance}_v{args.version}c{args.avecCapacite}.sol')
+    model.checkSolution(capacity)
 
     #__________________________ write results in dataBase file
     with open(args.fichierResultat, 'a') as f:
-        f.write(f'{args.nbPoints} {args.nbAouvrir} {args.indiceInstance} {args.version} {args.avecCapacite} {model.erreur} {model.statut} {model.etat} {model.temps_creation} {model.temps} {model.gap} {model.obj} {model.obj_upper} {model.obj_lower}\n')
+        f.write(f'{args.nbPoints} {args.nbAouvrir} {args.indiceInstance} {args.version} {args.avecCapacite} {model.erreur} {model.statut} {model.etat} {model.temps_creation} {model.temps} {model.gap} {model.obj} {model.obj_upper} {model.obj_lower} {model.validite}\n')
 
 if __name__ == "__main__":
     main()

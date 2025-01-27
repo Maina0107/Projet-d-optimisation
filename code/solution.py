@@ -33,23 +33,11 @@ class PCentreSolution:
     #_______________________ Méthodes _______________________
 
         
-    def ecriture_sol(self, instance_name: str, version: int, capacite: bool, versioncapa: int):
-
-        # Construire le nom du fichier en fonction des paramètres
-        if(capacite):
-            if(versioncapa == 1):
-                capacity_flag = "c1"
-            else:
-                capacity_flag = "c2"
-        else:
-            capacity_flag = "c0" 
-
-        filename = f"{instance_name}_v{version}{capacity_flag}.sol"
-        solutionfilePath = filename
+    def ecriture_sol(self, filename: str):
 
         nb_noeuds = len(self.ouverture_installation)
 
-        with open(solutionfilePath, 'w') as file:
+        with open(filename, 'w') as file:
             # les ouvertures
             for i in range(nb_noeuds) :
                 file.write(str(self.ouverture_installation[i]))

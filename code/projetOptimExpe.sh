@@ -6,7 +6,7 @@ dossier_Experimentation="Experimentations"
 
 ###### ATTENTIOOOOOOON CREER LES DOSSIERS DANS Code !!!!!!!!!!!!!!!!!!!!!!!!!
 
-Noeuds=(30) # Ensemble des valeur possible de n
+Noeuds=(30 50) # Ensemble des valeur possible de n
 # Les valeurs de p pour chaque n
 P_5=(1 2 3) 
 P_10=(1 2 3)
@@ -22,7 +22,7 @@ TL=300  # Temps limite de résolution
 for n in "${Noeuds[@]}"; do
     results_file="${dossier_Experimentation}/results_n${n}.txt"
     rm -f "$results_file" 
-    echo "n p i v c erreur statut etat temps_creation temps gap obj obj_upper obj_lower" >> "${results_file}" # Entête du fichier de résultats
+    echo "n p i v c erreur statut etat temps_creation temps gap obj obj_upper obj_lower validite" >> "${results_file}" # Entête du fichier de résultats
     mesP="P_${n}[@]"
     for p in "${!mesP}"; do
         for i in "${index[@]}"; do

@@ -27,6 +27,7 @@ class ModelesPCentre:
         self.etat = etat 
         self.temps_creation = -1
         self.erreur = 'ras'
+        self.validite = 1
 
 
     #_______________________ Méthodes Création _______________________
@@ -123,3 +124,33 @@ class ModelesPCentre:
     #_______________________ Méthode Extraction de la Solution _______________________
     def extraire_solution(self, capacite: bool):
         raise NotImplementedError("This method should be overridden by subclasses")
+    
+
+
+    def checkSolution(self, capacite: bool):
+        # le nombre d'installations ouvertes doit être inférieur ou égal à p
+        if (sum(self.solution.ouverture_installation) > self.data.p):
+            self.validite = 0
+        # chaque client doit être affecté, à une installation existante et ouverte
+        for j in range(self.data.nb_clients):
+            i = self.solution.affectation_client[j]     # l'installation à laquelle est affecté le client j
+            # si l'installation n'existe pas
+            if (i > self.data.nb_installations or i < 0):
+                self.validite = 0
+            # si l'installation n'est pas ouverte
+            if (self.solution.ouverture_installation[i] == 0):
+                self.validite = 0
+            # on vérifie que la distance est bien inférieure ou égale à la distance maximale trouvée
+            if (self.data.matrice_distances[i,j] > self.solution.val_fonction):
+                self.validite = 0
+        # si on a pris en compte les capacités
+        # il faut que la somme des demandes des clients affectés à une installation soit inférieure ou égale à la capacité de celle-ci
+        if (capacite == True):
+            for i in range(self.data.nb_installations):
+                # la somme des demandes des clients affectés à l'installation i
+                somme_demandes = 0
+                for j in range(self.data.nb_clients):
+                    if (self.solution.affectation_client[j] == i):
+                        somme_demandes += self.data.demandes[j]
+                if (somme_demandes > self.data.capacites[i]):
+                    self.validite = 0
