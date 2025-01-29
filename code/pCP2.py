@@ -65,7 +65,9 @@ class VersionRayon_1(ModelesPCentre):
             model.c6 = pe.ConstraintList()
             for i in F:
                 for j in C:
-                    model.c6.add( quicksum(model.z[k] for k in K if self.data.matrice_distances[i,j] <= self.data.distances_triees[k]) >= model.y[i,j])
+                    for k in K:
+                        if(self.data.matrice_distances[i,j] >= self.data.distances_triees[k]):
+                            model.c6.add(model.y[i,j] <= model.z[k])
 
 
         self.modele = model           #Va permettre d'enregistrer le modèle dans la classe mère

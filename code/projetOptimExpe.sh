@@ -6,7 +6,7 @@ dossier_Experimentation="Experimentations"
 
 ###### ATTENTIOOOOOOON CREER LES DOSSIERS DANS Code !!!!!!!!!!!!!!!!!!!!!!!!!
 
-Noeuds=(30 50) # Ensemble des valeur possible de n
+Noeuds=(5 10 20 30 50) # Ensemble des valeur possible de n
 # Les valeurs de p pour chaque n
 P_5=(1 2 3) 
 P_10=(1 2 3)
