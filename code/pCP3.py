@@ -85,7 +85,7 @@ class VersionRayon_2(ModelesPCentre):
 
         # si une solution a été trouvée, on modifie les valeurs
         if (self.statut == True):
-            self.solution.val_fonction = pe.value(self.modele.obj)
+            self.solution.val_fonction = round(pe.value(self.modele.obj),2)
             # si on a choisi de prendre en compte les capacités, la variable d'affectation existe
             if (capacite == True):
                 for i in range(self.data.nb_installations):
@@ -106,6 +106,6 @@ class VersionRayon_2(ModelesPCentre):
                 for j in range(self.data.nb_clients):
                     # on affecte le client j à la première installation ouverte dans le rayon optimal
                     for i in range (self.data.nb_installations):
-                        if (self.data.matrice_distances[i,j] <= pe.value(self.modele.obj) and pe.value(self.modele.x[i]) >= 0.8):
+                        if (self.data.matrice_distances[i,j] <= pe.value(self.modele.obj)+0.001 and pe.value(self.modele.x[i]) >= 0.8):
                             self.solution.affectation_client[j] = i
                             break
